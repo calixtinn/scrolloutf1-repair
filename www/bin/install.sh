@@ -307,7 +307,7 @@ rm -fr /etc/cron.daily/clamav
 /etc/init.d/cron restart
 
 organization=NA
-hostname=$(hostname)
+hostname=localhost
 domain=localdomain
 
 openssl req -new -sha384 -newkey rsa:4096 -days 1000 -nodes -x509 -subj "/O=${organization[*]}/CN=$hostname.$domain" -keyout server.key  -out server.cert
