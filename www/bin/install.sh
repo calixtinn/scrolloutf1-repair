@@ -13,6 +13,24 @@
 
 grep -iE "debian|ubuntu" /etc/issue > /dev/null || (printf "Scrollout works on Debian or Ubuntu only. Aborting...\n" && exit);
 
+
+function php5_install() {
+
+cat <<EOF >/etc/apt/sources.list.d/jessie.list
+# Debian Jessie repositories
+deb http://ftp.debian.org/debian/ jessie main contrib non-free
+deb-src http://ftp.debian.org/debian/ jessie main contrib non-free
+deb http://security.debian.org/ jessie/updates main contrib non-free
+deb-src http://security.debian.org/ jessie/updates main contrib non-free
+EOF
+
+sudo apt-get update && sudo apt-get install -y php5 php5-cgi php5-fpm
+
+sudo rm -f /etc/apt/sources.list.d/jessie.list && sudo apt-get update 
+
+}
+
+
 function f_install(){
 
 
@@ -20,6 +38,8 @@ for package in postfix amavisd-new spamassassin nginx;
 do
 	sudo dpkg -s $package 2>&1 | grep "ok installed" >/dev/null && printf "[ $package ] is installed.\nThis is not a fresh Operating System. You cannot have multiple instances of $package. I'll distroy your configuration. Stop trying.\nINSTALL SCROLLOUT ON A FRESH OPERATING SYSTEM ONLY. Aborting ... \n" && exit;
 done
+
+php5_install
 
 sudo apt-get install apt-transport-https -y --force-yes
 
@@ -126,7 +146,7 @@ sudo pip install redis
 sudo apt-get install bind9 -y
 sudo apt-get install quagga -y
 sudo apt-get install parallel -y
-sudo apt-get install php5-fpm -y
+# sudo apt-get install php5-fpm -y
 sudo apt-get install host -y
 sudo apt-get install telnet -y
 sudo apt-get install pflogsumm -y
@@ -162,7 +182,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install nginx -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get install nginx-extras -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get install mailgraph -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get install ntpdate -y
-sudo DEBIAN_FRONTEND=noninteractive apt-get install php5 -y
+# sudo DEBIAN_FRONTEND=noninteractive apt-get install php5 -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get install postfix -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get install smbfs -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get install cifs-utils -y

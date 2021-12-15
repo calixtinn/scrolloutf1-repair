@@ -1,6 +1,31 @@
 # scrolloutf1-repair
-Copy of Scrollout F1, repaired to work with bare installation of Debian 9 (Stretch).
 
-Default archive supports up to Debian 7/8, with Wheezy repo.
+Forked from [scrolloutf1-repair](https://github.com/steelburn/scrolloutf1-repair)
 
-Target: Make due changes to allow Scrollout F1 to work with Debian 9.
+## Adjustements:
+
+Debian 9 doesn't have the php5-fpm, php5-cgi and php5 packages on your repository. I've added Debian 8 "Jessie" repositories temporarily to download these dependencies, and after install, I removed them.
+
+## Observations:
+
+The hostname of the machine must be "localhost"!
+
+```bash
+hostnamectl set-hostname localhost
+logout
+```
+
+## Installation (as root)
+
+```bash
+apt update
+apt-get install -y sudo ca-certificates git
+git clone https://github.com/calixtinn/scrolloutf1-repair.git /tmp/scrolloutf1
+chmod 755 /tmp/scrolloutf1/www/bin/*
+/tmp/scrolloutf1/www/bin/install.sh
+```
+
+
+
+
+
