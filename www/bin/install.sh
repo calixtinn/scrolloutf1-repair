@@ -30,6 +30,15 @@ sudo rm -f /etc/apt/sources.list.d/jessie.list && sudo apt-get update
 
 }
 
+function spamassassin_update() {
+
+	curl -sL https://spamassassin.apache.org/updates/MIRRORED.BY -o /tmp/MIRRORED.BY
+	cat /tmp/MIRRORED.BY > /var/lib/spamassassin/*/updates_spamassassin_org/MIRRORED.BY
+	sudo chown -R debian-spamd:debian-spamd /etc/spamassassin/
+	sudo chown -R debian-spamd:debian-spamd /var/lib/spamassassin/
+	su - debian-spamd -c 'sa-update'
+}
+
 
 function f_install(){
 
@@ -457,6 +466,8 @@ localip=`ifconfig | grep -m1 "inet .* Bcast.* Mask" | sed "s/.*addr:\([0-9]*\.[0
 /etc/init.d/incron restart
 # sed -i -e "s/rotate [1-9]\{1\}$/rotate 52\n\tsize 10M/" /etc/logrotate.d/rsyslog
 clear;
+
+spamassassin_update
 
 printf "\nConnect to http://$localip/ using any web browser"
 printf "\nUser: Admin"
