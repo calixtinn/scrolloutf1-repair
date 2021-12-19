@@ -19,7 +19,7 @@ apt update
 apt-get install -y sudo ca-certificates git
 git clone https://github.com/calixtinn/scrolloutf1-repair.git /tmp/scrolloutf1
 chmod 755 /tmp/scrolloutf1/www/bin/*
-/tmp/scrolloutf1/www/bin/install.sh
+/tmp/scrolloutf1/www/bin/install.sh <hostname> <domain>
 ```
 
 ## Credits
