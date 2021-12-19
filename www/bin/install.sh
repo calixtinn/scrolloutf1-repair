@@ -30,6 +30,15 @@ sudo rm -f /etc/apt/sources.list.d/jessie.list && sudo apt-get update
 
 }
 
+function spamassassin_update() {
+
+	curl -sL https://spamassassin.apache.org/updates/MIRRORED.BY -o /tmp/MIRRORED.BY
+	cat /tmp/MIRRORED.BY > /var/lib/spamassassin/*/updates_spamassassin_org/MIRRORED.BY
+	sudo chown -R debian-spamd:debian-spamd /etc/spamassassin/
+	sudo chown -R debian-spamd:debian-spamd /var/lib/spamassassin/
+	su - debian-spamd -c 'sa-update'
+}
+
 
 function f_install(){
 
@@ -307,8 +316,8 @@ rm -fr /etc/cron.daily/clamav
 /etc/init.d/cron restart
 
 organization=NA
-hostname=localhost
-domain=localdomain
+hostname=$1
+domain=$2
 
 openssl req -new -sha384 -newkey rsa:4096 -days 1000 -nodes -x509 -subj "/O=${organization[*]}/CN=$hostname.$domain" -keyout server.key  -out server.cert
 sudo mv server.cert /etc/postfix/certs/
@@ -457,6 +466,8 @@ localip=`ifconfig | grep -m1 "inet .* Bcast.* Mask" | sed "s/.*addr:\([0-9]*\.[0
 /etc/init.d/incron restart
 # sed -i -e "s/rotate [1-9]\{1\}$/rotate 52\n\tsize 10M/" /etc/logrotate.d/rsyslog
 clear;
+
+spamassassin_update
 
 printf "\nConnect to http://$localip/ using any web browser"
 printf "\nUser: Admin"
